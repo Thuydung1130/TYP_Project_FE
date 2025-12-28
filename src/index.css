@@ -10,7 +10,174 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+  background-attachment: fixed;
+  color: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Space background với stars - chấm sao */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 90% 60%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 30% 80%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 70% 20%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(2px 2px at 40% 50%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 10% 40%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 85% 90%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 15% 15%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(2px 2px at 55% 85%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 95% 30%, rgba(255, 255, 255, 0.3), transparent);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: spaceMove 30s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Đám mây và hình tròn mờ - tăng opacity và giảm blur */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    /* Đám mây 1 - trên trái */
+    radial-gradient(ellipse 500px 250px at 10% 20%, rgba(96, 165, 250, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 200px at 5% 25%, rgba(96, 165, 250, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 350px 180px at 15% 15%, rgba(96, 165, 250, 0.1) 0%, transparent 60%),
+    
+    /* Đám mây 2 - giữa phải */
+    radial-gradient(ellipse 450px 220px at 85% 30%, rgba(167, 139, 250, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 380px 190px at 90% 35%, rgba(167, 139, 250, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 320px 160px at 80% 25%, rgba(167, 139, 250, 0.1) 0%, transparent 60%),
+    
+    /* Đám mây 3 - dưới trái */
+    radial-gradient(ellipse 480px 240px at 20% 75%, rgba(236, 72, 153, 0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 200px at 15% 80%, rgba(236, 72, 153, 0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 350px 175px at 25% 70%, rgba(236, 72, 153, 0.09) 0%, transparent 60%),
+    
+    /* Hình tròn mờ 1 - trên giữa */
+    radial-gradient(circle 200px at 50% 15%, rgba(96, 165, 250, 0.12) 0%, transparent 70%),
+    
+    /* Hình tròn mờ 2 - giữa trái */
+    radial-gradient(circle 180px at 25% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 70%),
+    
+    /* Hình tròn mờ 3 - dưới phải */
+    radial-gradient(circle 220px at 75% 85%, rgba(236, 72, 153, 0.11) 0%, transparent 70%),
+    
+    /* Hình tròn mờ 4 - giữa phải */
+    radial-gradient(circle 160px at 70% 40%, rgba(96, 165, 250, 0.1) 0%, transparent 70%),
+    
+    /* Hình tròn mờ 5 - trên phải */
+    radial-gradient(circle 190px at 80% 20%, rgba(167, 139, 250, 0.11) 0%, transparent 70%),
+    
+    /* Hình tròn mờ 6 - dưới giữa */
+    radial-gradient(circle 170px at 50% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+  background-size: 100% 100%;
+  animation: cloudFloat 25s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+@keyframes spaceMove {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+@keyframes cloudFloat {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  25% { 
+    transform: translate(30px, -20px) scale(1.05);
+    opacity: 0.95;
+  }
+  50% { 
+    transform: translate(-20px, 15px) scale(0.95);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: translate(25px, 10px) scale(1.02);
+    opacity: 0.92;
+  }
+}
+
+/* Đám mây bổ sung - tăng kích thước và opacity */
+#root::before {
+  content: '';
+  position: fixed;
+  width: 600px;
+  height: 350px;
+  top: 5%;
+  left: 5%;
+  background: radial-gradient(ellipse, rgba(96, 165, 250, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: cloudMove1 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(35px);
+}
+
+#root::after {
+  content: '';
+  position: fixed;
+  width: 550px;
+  height: 300px;
+  bottom: 10%;
+  right: 10%;
+  background: radial-gradient(ellipse, rgba(236, 72, 153, 0.11) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: cloudMove2 22s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(35px);
+}
+
+@keyframes cloudMove1 {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  33% { 
+    transform: translate(40px, -30px) scale(1.1) rotate(5deg);
+    opacity: 0.95;
+  }
+  66% { 
+    transform: translate(-30px, 25px) scale(0.9) rotate(-3deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes cloudMove2 {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  33% { 
+    transform: translate(-35px, 40px) scale(1.08) rotate(-4deg);
+    opacity: 0.95;
+  }
+  66% { 
+    transform: translate(45px, -25px) scale(0.92) rotate(3deg);
+    opacity: 0.9;
+  }
 }
 
 code {
@@ -19,5 +186,6 @@ code {
 
 #root {
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
-

@@ -16,19 +16,19 @@ function TestResults({ result }) {
   const getStatusInfo = (status) => {
     switch (status) {
       case 'AC':
-        return { label: 'ACCEPTED', icon: '✅', color: 'success', bgColor: '#d4edda', textColor: '#155724' };
+        return { label: 'ACCEPTED', icon: '✅', color: 'success' };
       case 'WA':
-        return { label: 'WRONG ANSWER', icon: '❌', color: 'error', bgColor: '#f8d7da', textColor: '#721c24' };
+        return { label: 'WRONG ANSWER', icon: '❌', color: 'error' };
       case 'TLE':
-        return { label: 'TIME LIMIT EXCEEDED', icon: '⏱️', color: 'warning', bgColor: '#fff3cd', textColor: '#856404' };
+        return { label: 'TIME LIMIT EXCEEDED', icon: '⏱️', color: 'warning' };
       case 'MLE':
-        return { label: 'MEMORY LIMIT EXCEEDED', icon: '💾', color: 'warning', bgColor: '#fff3cd', textColor: '#856404' };
+        return { label: 'MEMORY LIMIT EXCEEDED', icon: '💾', color: 'warning' };
       case 'RE':
-        return { label: 'RUNTIME ERROR', icon: '💥', color: 'error', bgColor: '#f8d7da', textColor: '#721c24' };
+        return { label: 'RUNTIME ERROR', icon: '💥', color: 'error' };
       case 'CE':
-        return { label: 'COMPILATION ERROR', icon: '🔨', color: 'error', bgColor: '#f8d7da', textColor: '#721c24' };
+        return { label: 'COMPILATION ERROR', icon: '🔨', color: 'error' };
       default:
-        return { label: status, icon: '❓', color: 'unknown', bgColor: '#e9ecef', textColor: '#495057' };
+        return { label: status, icon: '❓', color: 'unknown' };
     }
   };
 
@@ -42,21 +42,18 @@ function TestResults({ result }) {
 
       {/* Hiển thị tất cả trên 1 dòng */}
       <div className="result-line">
-        <div 
-          className={`final-status status-${statusInfo.color}`} 
-          style={{ 
-            backgroundColor: statusInfo.bgColor,
-            color: statusInfo.textColor
-          }}
-        >
+        <div className={`final-status status-${statusInfo.color}`}>
           <span className="status-icon">{statusInfo.icon}</span>
           <span className="status-label">{statusInfo.label}</span>
         </div>
         
         {totalTests > 0 && (
-          <span className="test-count">
-            {passedTests} / {totalTests} test cases passed
-          </span>
+          <div className="test-count-badge">
+            <span className="test-count-number">{passedTests}</span>
+            <span className="test-count-separator">/</span>
+            <span className="test-count-total">{totalTests}</span>
+            <span className="test-count-text">test cases</span>
+          </div>
         )}
       </div>
 

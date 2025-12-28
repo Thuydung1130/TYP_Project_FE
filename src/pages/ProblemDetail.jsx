@@ -37,13 +37,20 @@ function ProblemDetail() {
       setLoading(true);
       setError(null);
       const data = await getProblem(id);
+      console.log('Problem data:', data);
+      
       // Backend trả về object với _id, title, description
-      setProblem({
-        id: data._id,
-        title: data.title,
-        description: data.description,
-      });
+      if (data) {
+        setProblem({
+          id: data._id || id,
+          title: data.title || 'Không có tiêu đề',
+          description: data.description || 'Không có mô tả',
+        });
+      } else {
+        setError('Không tìm thấy đề bài');
+      }
     } catch (err) {
+      console.error('Error loading problem:', err);
       setError(err.message || 'Không thể tải đề bài');
     } finally {
       setLoading(false);
@@ -85,8 +92,6 @@ function ProblemDetail() {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-    // Reset về code mặc định nếu muốn
-    // setCode(DEFAULT_CODE);
   };
 
   const handleSubmit = async () => {
@@ -148,48 +153,8 @@ function ProblemDetail() {
         <div className="problem-info">
           <div className="problem-section">
             <h3>Mô tả</h3>
-            <p>{problem?.description}</p>
+            <p>{problem?.description || 'Chưa có mô tả cho bài tập này.'}</p>
           </div>
-
-          <div className="problem-section">
-            <h3>Định dạng đầu vào</h3>
-            <pre>{problem?.inputFormat}</pre>
-          </div>
-
-          <div className="problem-section">
-            <h3>Định dạng đầu ra</h3>
-            <pre>{problem?.outputFormat}</pre>
-          </div>
-
-          {problem?.examples && problem.examples.length > 0 && (
-            <div className="problem-section">
-              <h3>Ví dụ</h3>
-              {problem.examples.map((example, index) => (
-                <div key={index} className="example">
-                  <div className="example-item">
-                    <strong>Input:</strong>
-                    <pre>{example.input}</pre>
-                  </div>
-                  <div className="example-item">
-                    <strong>Output:</strong>
-                    <pre>{example.output}</pre>
-                  </div>
-                  {example.explanation && (
-                    <div className="example-explanation">
-                      <strong>Giải thích:</strong> {example.explanation}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {problem?.constraints && (
-            <div className="problem-section">
-              <h3>Ràng buộc</h3>
-              <pre>{problem.constraints}</pre>
-            </div>
-          )}
         </div>
 
         <div className="code-section">
@@ -205,9 +170,9 @@ function ProblemDetail() {
           </div>
 
           {/* File Upload Section */}
-          <div style={{ marginBottom: '15px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-              <label style={{ cursor: 'pointer', padding: '8px 16px', backgroundColor: '#007bff', color: 'white', borderRadius: '4px', border: 'none' }}>
+          <div className="file-upload-section">
+            <div className="file-upload-controls">
+              <label className="file-upload-button">
                 📁 Chọn file C++
                 <input
                   ref={fileInputRef}
@@ -218,26 +183,18 @@ function ProblemDetail() {
                 />
               </label>
               {fileName && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
-                  <span style={{ color: '#28a745', fontWeight: 'bold' }}>✓ {fileName}</span>
+                <div className="file-info">
+                  <span className="file-name">✓ {fileName}</span>
                   <button
                     onClick={handleRemoveFile}
-                    style={{
-                      padding: '4px 8px',
-                      backgroundColor: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '12px'
-                    }}
+                    className="file-remove-button"
                   >
                     Xóa
                   </button>
                 </div>
               )}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>
+            <div className="file-upload-hint">
               {submitMode === 'file' && selectedFile 
                 ? 'Bạn đang nộp bằng file. File sẽ được sử dụng để submit.'
                 : 'Hoặc nhập code trực tiếp vào editor bên dưới.'}
