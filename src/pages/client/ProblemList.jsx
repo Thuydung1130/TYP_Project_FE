@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProblems } from '../services/api';
+import { getProblems } from '../../services/api';
 import './ProblemList.css';
 
 function ProblemList() {

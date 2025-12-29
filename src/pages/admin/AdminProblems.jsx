@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAdminProblems, getAdminProblem, createAdminProblem, updateAdminProblem, deleteAdminProblem } from '../services/api';
+import { getAdminProblems, getAdminProblem, createAdminProblem, updateAdminProblem, deleteAdminProblem } from '../../services/api';
 import './AdminProblems.css';
 
 function AdminProblems() {

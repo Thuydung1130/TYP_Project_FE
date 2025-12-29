@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import ProblemList from './pages/ProblemList';
-import ProblemDetail from './pages/ProblemDetail';
-import AdminLayout from './components/AdminLayout';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminProblems from './pages/AdminProblems';
-import AdminTestcases from './pages/AdminTestcases';
+import ProblemList from './pages/client/ProblemList';
+import ProblemDetail from './pages/client/ProblemDetail';
+import AdminLayout from './components/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProblems from './pages/admin/AdminProblems';
+import AdminTestcases from './pages/admin/AdminTestcases';
 import './App.css';
 
 function App() {

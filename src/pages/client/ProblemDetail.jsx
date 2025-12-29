@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProblem, submitCode, getTestcaseSample } from '../services/api';
-import CodeEditor from '../components/CodeEditor';
-import TestResults from '../components/TestResults';
+import { getProblem, submitCode, getTestcaseSample } from '../../services/api';
+import CodeEditor from '../../components/client/CodeEditor';
+import TestResults from '../../components/client/TestResults';
 import './ProblemDetail.css';
 
 const DEFAULT_CODE = `#include <iostream>
