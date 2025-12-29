@@ -1,0 +1,21 @@
+.admin-dashboard {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.dashboard-greeting {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2rem;
+}
+
+.dashboard-content {
+  width: 100%;
+  min-height: 400px;
+  background: #ffffff;
+}
+

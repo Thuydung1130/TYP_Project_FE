@@ -114,5 +114,48 @@ export const getProblems = async () => {
   }
 };
 
+// Admin APIs
+// GET /admin/problems
+export const getAdminProblems = async () => {
+  try {
+    const response = await api.get('/admin/problems');
+    console.log('Admin API Response:', response);
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    return response.data ? [response.data] : [];
+  } catch (error) {
+    console.error('Admin API Error:', error);
+    let errorMessage = 'Không thể kết nối đến server';
+    if (error.response) {
+      errorMessage = error.response.data?.error || error.response.data?.message || `Lỗi ${error.response.status}: ${error.response.statusText}`;
+    } else if (error.request) {
+      errorMessage = 'Không thể kết nối đến server. Vui lòng kiểm tra backend có đang chạy không.';
+    } else {
+      errorMessage = error.message || 'Đã xảy ra lỗi';
+    }
+    throw new Error(errorMessage);
+  }
+};
+
+// GET /admin/problems/:id
+export const getAdminProblem = async (id) => {
+  try {
+    const response = await api.get(`/admin/problems/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Admin API Error:', error);
+    let errorMessage = 'Không thể tải đề bài';
+    if (error.response) {
+      errorMessage = error.response.data?.error || error.response.data?.message || `Lỗi ${error.response.status}`;
+    } else if (error.request) {
+      errorMessage = 'Không thể kết nối đến server';
+    } else {
+      errorMessage = error.message || 'Đã xảy ra lỗi';
+    }
+    throw new Error(errorMessage);
+  }
+};
+
 export default api;
 
