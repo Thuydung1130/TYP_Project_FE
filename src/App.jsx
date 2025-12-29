@@ -4,6 +4,7 @@ import ProblemDetail from './pages/ProblemDetail';
 import AdminLayout from './components/AdminLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProblems from './pages/AdminProblems';
+import AdminTestcases from './pages/AdminTestcases';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="problems" element={<AdminProblems />} />
+          <Route path="testcases" element={<AdminTestcases />} />
         </Route>
         
         {/* Client Routes */}

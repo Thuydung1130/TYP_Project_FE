@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAdminProblems, getAdminProblem } from '../services/api';
+import { getAdminProblems, getAdminProblem, createAdminProblem, updateAdminProblem, deleteAdminProblem } from '../services/api';
 import './AdminProblems.css';
 
 function AdminProblems() {
@@ -8,6 +8,7 @@ function AdminProblems() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
@@ -36,20 +37,46 @@ function AdminProblems() {
     }
   };
 
-  // Filter problems based on search term
+  // Filter problems based on search term and difficulty
   useEffect(() => {
-    if (!searchTerm.trim()) {
-      setProblems(allProblems);
-    } else {
-      const filtered = allProblems.filter((problem) => {
+    let filtered = allProblems;
+
+    // Filter by search term
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((problem) => {
         const title = (problem.title || '').toLowerCase();
         const description = (problem.description || '').toLowerCase();
         const search = searchTerm.toLowerCase();
         return title.includes(search) || description.includes(search);
       });
-      setProblems(filtered);
     }
-  }, [searchTerm, allProblems]);
+
+    // Filter by difficulty
+    if (difficultyFilter !== 'all') {
+      filtered = filtered.filter((problem) => {
+        const difficulty = (problem.difficulty || 'EASY').toUpperCase();
+        return difficulty === difficultyFilter.toUpperCase();
+      });
+    }
+
+    setProblems(filtered);
+  }, [searchTerm, difficultyFilter, allProblems]);
+
+  const getDifficultyLabel = (difficulty) => {
+    const diff = (difficulty || 'EASY').toUpperCase();
+    if (diff === 'EASY') return 'Easy';
+    if (diff === 'MEDIUM') return 'Medium';
+    if (diff === 'HARD') return 'Hard';
+    return 'Easy';
+  };
+
+  const getDifficultyClass = (difficulty) => {
+    const diff = (difficulty || 'EASY').toUpperCase();
+    if (diff === 'EASY') return 'difficulty-badge-easy';
+    if (diff === 'MEDIUM') return 'difficulty-badge-medium';
+    if (diff === 'HARD') return 'difficulty-badge-hard';
+    return 'difficulty-badge-easy';
+  };
 
   const handleAdd = () => {
     setSelectedProblem(null);
@@ -69,16 +96,75 @@ function AdminProblems() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa bài tập này?')) {
-      // TODO: Implement delete API call when backend is ready
-      alert('Chức năng xóa sẽ được thêm khi backend hỗ trợ');
+    if (window.confirm('Bạn có chắc chắn muốn xóa bài tập này? Tất cả testcase liên quan cũng sẽ bị xóa.')) {
+      try {
+        await deleteAdminProblem(id);
+        alert('Xóa bài tập thành công!');
+        loadProblems();
+      } catch (err) {
+        alert('Lỗi khi xóa bài tập: ' + err.message);
+      }
     }
   };
 
-  const handleSave = () => {
-    // TODO: Implement save API call when backend is ready
-    alert('Chức năng thêm/sửa sẽ được thêm khi backend hỗ trợ');
-    setShowModal(false);
+  const handleSave = async () => {
+    const form = document.querySelector('.modal-body');
+    const titleInput = form.querySelector('input[type="text"]');
+    const descriptionInput = form.querySelector('textarea');
+    const difficultySelect = form.querySelector('select.form-select');
+    const timeLimitInput = form.querySelector('input[type="number"][placeholder*="Time"]');
+    const memoryLimitInput = form.querySelector('input[type="number"][placeholder*="Memory"]');
+
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+    const difficulty = difficultySelect.value;
+    const timeLimit = parseInt(timeLimitInput.value);
+    const memoryLimit = parseInt(memoryLimitInput.value);
+
+    // Validation
+    if (!title) {
+      alert('Vui lòng nhập tiêu đề');
+      return;
+    }
+    if (!description) {
+      alert('Vui lòng nhập mô tả');
+      return;
+    }
+    if (!difficulty) {
+      alert('Vui lòng chọn độ khó');
+      return;
+    }
+    if (!timeLimit || timeLimit <= 0) {
+      alert('Time Limit phải là số dương');
+      return;
+    }
+    if (!memoryLimit || memoryLimit <= 0) {
+      alert('Memory Limit phải là số dương');
+      return;
+    }
+
+    try {
+      const problemData = {
+        title,
+        description,
+        difficulty,
+        timeLimit,
+        memoryLimit
+      };
+
+      if (modalMode === 'add') {
+        await createAdminProblem(problemData);
+        alert('Tạo bài tập thành công!');
+      } else {
+        await updateAdminProblem(selectedProblem._id || selectedProblem.id, problemData);
+        alert('Cập nhật bài tập thành công!');
+      }
+      
+      setShowModal(false);
+      loadProblems();
+    } catch (err) {
+      alert('Lỗi: ' + err.message);
+    }
   };
 
   if (loading) {
@@ -108,31 +194,51 @@ function AdminProblems() {
         </div>
       )}
 
-      <div className="search-container">
-        <div className="search-box">
-          <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Tìm kiếm theo tiêu đề hoặc mô tả..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <button 
-              className="search-clear"
-              onClick={() => setSearchTerm('')}
-              title="Xóa tìm kiếm"
-            >
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
+      <div className="filters-container">
+        <div className="search-container">
+          <div className="search-box">
+            <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Tìm kiếm theo tiêu đề hoặc mô tả..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button 
+                className="search-clear"
+                onClick={() => setSearchTerm('')}
+                title="Xóa tìm kiếm"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
-        {searchTerm && (
+
+        <div className="difficulty-filter-container">
+          <label htmlFor="difficulty-filter" className="filter-label">
+            Lọc theo độ khó:
+          </label>
+          <select
+            id="difficulty-filter"
+            className="difficulty-filter-select"
+            value={difficultyFilter}
+            onChange={(e) => setDifficultyFilter(e.target.value)}
+          >
+            <option value="all">Tất cả</option>
+            <option value="EASY">Easy</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HARD">Hard</option>
+          </select>
+        </div>
+
+        {(searchTerm || difficultyFilter !== 'all') && (
           <div className="search-results-info">
             Tìm thấy {problems.length} bài tập
           </div>
@@ -146,13 +252,16 @@ function AdminProblems() {
               <th>STT</th>
               <th>Title</th>
               <th>Description</th>
+              <th>Difficulty</th>
+              <th>Time Limit</th>
+              <th>Memory Limit</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {problems.length === 0 ? (
               <tr>
-                <td colSpan="4" className="empty-state">
+                <td colSpan="7" className="empty-state">
                   Chưa có bài tập nào trong hệ thống
                 </td>
               </tr>
@@ -167,6 +276,21 @@ function AdminProblems() {
                         ? `${problem.description.substring(0, 100)}...` 
                         : problem.description
                     ) : 'N/A'}
+                  </td>
+                  <td className="difficulty-cell">
+                    <span className={`difficulty-badge ${getDifficultyClass(problem.difficulty)}`}>
+                      {getDifficultyLabel(problem.difficulty)}
+                    </span>
+                  </td>
+                  <td className="time-limit-cell">
+                    {problem.timeLimit !== undefined 
+                      ? `${problem.timeLimit} ms` 
+                      : 'N/A'}
+                  </td>
+                  <td className="memory-limit-cell">
+                    {problem.memoryLimit !== undefined 
+                      ? `${problem.memoryLimit} MB` 
+                      : 'N/A'}
                   </td>
                   <td className="actions-cell">
                     <button 
@@ -209,20 +333,56 @@ function AdminProblems() {
             </div>
             <div className="modal-body">
               <div className="form-group">
-                <label>Title</label>
+                <label>Title <span className="required">*</span></label>
                 <input 
                   type="text" 
                   defaultValue={selectedProblem?.title || ''}
                   placeholder="Enter problem title"
+                  required
                 />
               </div>
               <div className="form-group">
-                <label>Description</label>
+                <label>Description <span className="required">*</span></label>
                 <textarea 
                   defaultValue={selectedProblem?.description || ''}
                   placeholder="Enter problem description"
                   rows="5"
+                  required
                 />
+              </div>
+              <div className="form-group">
+                <label>Difficulty <span className="required">*</span></label>
+                <select
+                  className="form-select"
+                  defaultValue={selectedProblem?.difficulty || 'EASY'}
+                  required
+                >
+                  <option value="EASY">Easy</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="HARD">Hard</option>
+                </select>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Time Limit (ms) <span className="required">*</span></label>
+                  <input 
+                    type="number" 
+                    defaultValue={selectedProblem?.timeLimit || 1000}
+                    placeholder="Time Limit"
+                    min="1"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Memory Limit (MB) <span className="required">*</span></label>
+                  <input 
+                    type="number" 
+                    defaultValue={selectedProblem?.memoryLimit || 256}
+                    placeholder="Memory Limit"
+                    min="1"
+                    required
+                  />
+                </div>
               </div>
             </div>
             <div className="modal-footer">

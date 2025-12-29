@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProblem, submitCode } from '../services/api';
+import { getProblem, submitCode, getTestcaseSample } from '../services/api';
 import CodeEditor from '../components/CodeEditor';
 import TestResults from '../components/TestResults';
 import './ProblemDetail.css';
@@ -18,6 +18,7 @@ function ProblemDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [problem, setProblem] = useState(null);
+  const [testcaseSample, setTestcaseSample] = useState(null);
   const [code, setCode] = useState(DEFAULT_CODE);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -46,6 +47,10 @@ function ProblemDetail() {
           title: data.title || 'Không có tiêu đề',
           description: data.description || 'Không có mô tả',
         });
+        
+        // Load testcase sample
+        const sample = await getTestcaseSample(data._id || id);
+        setTestcaseSample(sample);
       } else {
         setError('Không tìm thấy đề bài');
       }
@@ -155,6 +160,22 @@ function ProblemDetail() {
             <h3>Mô tả</h3>
             <p>{problem?.description || 'Chưa có mô tả cho bài tập này.'}</p>
           </div>
+          
+          {testcaseSample && (
+            <div className="problem-section">
+              <h3>Ví dụ</h3>
+              <div className="example">
+                <div className="example-item">
+                  <strong>Input:</strong>
+                  <pre>{testcaseSample.input || 'N/A'}</pre>
+                </div>
+                <div className="example-item">
+                  <strong>Output:</strong>
+                  <pre>{testcaseSample.output || 'N/A'}</pre>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="code-section">

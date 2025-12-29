@@ -10,9 +10,13 @@
 }
 
 .problem-detail-header h2 {
-  color: #2c3e50;
+  color: #ffffff;
   font-size: 2rem;
   flex: 1;
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .problem-detail-content {
@@ -29,10 +33,12 @@
 }
 
 .problem-info {
-  background: white;
-  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.2);
 }
 
 .problem-section {
@@ -44,69 +50,87 @@
 }
 
 .problem-section h3 {
-  color: #2c3e50;
+  color: #ffffff;
   font-size: 1.25rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+  font-weight: 600;
 }
 
 .problem-section p {
-  color: #34495e;
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
   margin-bottom: 0.5rem;
+  font-size: 1rem;
 }
 
 .problem-section pre {
-  background-color: #f8f9fa;
+  background-color: rgba(15, 23, 42, 0.8);
   padding: 1rem;
-  border-radius: 4px;
-  border-left: 4px solid #3498db;
+  border-radius: 8px;
+  border-left: 4px solid #60a5fa;
   overflow-x: auto;
-  color: #2c3e50;
-  font-family: 'Courier New', monospace;
+  color: #e2e8f0;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin: 0.5rem 0;
 }
 
 .example {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 4px;
+  background-color: rgba(15, 23, 42, 0.4);
+  padding: 1.5rem;
+  border-radius: 12px;
   margin-bottom: 1rem;
+  border: 1px solid rgba(96, 165, 250, 0.2);
 }
 
 .example-item {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.example-item:last-child {
+  margin-bottom: 0;
 }
 
 .example-item strong {
   display: block;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
 .example-item pre {
-  background-color: white;
-  padding: 0.75rem;
-  border-radius: 4px;
+  background-color: rgba(15, 23, 42, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
   margin: 0;
-  border-left: 3px solid #27ae60;
+  border-left: 3px solid #10b981;
+  color: #e2e8f0;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .example-explanation {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #ddd;
-  color: #666;
+  border-top: 1px solid rgba(96, 165, 250, 0.2);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
 }
 
 .code-section {
-  background: white;
-  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(96, 165, 250, 0.2);
   display: flex;
   flex-direction: column;
 }
@@ -119,7 +143,78 @@
 }
 
 .code-section-header h3 {
-  color: #2c3e50;
+  color: #ffffff;
   font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.file-upload-section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+.file-upload-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.file-upload-button {
+  padding: 0.625rem 1.25rem;
+  background: rgba(96, 165, 250, 0.2);
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.file-upload-button:hover {
+  background: rgba(96, 165, 250, 0.3);
+  border-color: rgba(96, 165, 250, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.file-name {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.file-remove-button {
+  padding: 0.375rem 0.75rem;
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.file-remove-button:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.file-upload-hint {
+  margin-top: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  font-style: italic;
 }
 
