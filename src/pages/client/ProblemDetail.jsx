@@ -38,7 +38,7 @@ function ProblemDetail() {
       setLoading(true);
       setError(null);
       const data = await getProblem(id);
-      console.log('Problem data:', data);
+      //console.log('Problem data:', data);
       
       // Backend trả về object với _id, title, description
       if (data) {
@@ -234,4 +234,5 @@ function ProblemDetail() {
 }
 
 export default ProblemDetail;
+
 

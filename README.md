@@ -65,8 +65,10 @@ Nếu không có file `.env`, mặc định sẽ sử dụng `http://localhost:5
 2. Chạy `npm run dev` để khởi động frontend (port 3000)
 3. Truy cập `http://localhost:3000` trong browser
 
-## Ghi chú
 
-- Hiện tại đang sử dụng mock data để demo UI
-- Để kết nối với backend thật, uncomment các dòng API call trong code và comment phần mock data
 
+
+//client id: 1030441729766-d7n92bmocpaq6v4e3ban47qpsodgqaqc.apps.googleusercontent.com
+//1030441729766-d7n92bmocpaq6v4e3ban47qpsodgqaqc.apps.googleusercontent.com
+//client sêcret: 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
+//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

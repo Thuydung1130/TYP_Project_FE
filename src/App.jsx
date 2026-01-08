@@ -5,12 +5,17 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProblems from './pages/admin/AdminProblems';
 import AdminTestcases from './pages/admin/AdminTestcases';
+import LoginPage from './pages/client/LoginPage';
+import UserAvatar from './components/client/UserAvatar';
 import './App.css';
 
 function App() {
   return (
     <Router>
+
       <Routes>
+        {/* Login */}
+        <Route path="/login" element={<LoginPage />} />
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
@@ -18,7 +23,7 @@ function App() {
           <Route path="problems" element={<AdminProblems />} />
           <Route path="testcases" element={<AdminTestcases />} />
         </Route>
-        
+
         {/* Client Routes */}
         <Route path="/" element={
           <div className="app">
@@ -26,6 +31,7 @@ function App() {
               <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <h1>🧪 C++ Code Grader</h1>
               </Link>
+              <UserAvatar />
             </header>
             <main className="app-content">
               <ProblemList />
@@ -38,6 +44,7 @@ function App() {
               <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <h1>🧪 C++ Code Grader</h1>
               </Link>
+              <UserAvatar />
             </header>
             <main className="app-content">
               <ProblemDetail />
