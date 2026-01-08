@@ -19,7 +19,7 @@ function ProblemList() {
       setLoading(true);
       setError(null);
       const data = await getProblems();
-      console.log('Problems data:', data);
+      //console.log('Problems data:', data);
       
       // Kiểm tra nếu data là array và có dữ liệu
       if (Array.isArray(data) && data.length > 0) {
@@ -157,4 +157,5 @@ function ProblemList() {
 }
 
 export default ProblemList;
+
 
