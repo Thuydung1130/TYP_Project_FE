@@ -332,6 +332,32 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// ✅ Response interceptor để xử lý token hết hạn
+api.interceptors.response.use(
+  (response) => response, // Trả về response thành công bình thường
+  (error) => {
+    // Xử lý lỗi 401 (Unauthorized) hoặc 403 (Forbidden) - token hết hạn hoặc không hợp lệ
+    // Backend trả về:
+    // - 401 khi thiếu token hoặc định dạng sai
+    // - 403 khi token hết hạn hoặc không hợp lệ
+    const status = error.response?.status;
+    if (status === 401 || status === 403) {
+      // Xóa token và user khỏi localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      const currentPath = window.location.pathname;
+      // Chỉ redirect về login nếu đang ở client routes (không phải admin và không phải login)
+      // Admin routes không cần login nên không redirect
+      if (currentPath !== '/login' && !currentPath.startsWith('/admin')) {
+        // Sử dụng window.location.href để đảm bảo redirect ngay lập tức
+        // Force redirect ngay cả khi đang trong quá trình render
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 // ✅ Hàm xử lý lỗi chung
 const handleApiError = (error, defaultMessage = 'Đã xảy ra lỗi') => {
@@ -380,6 +406,11 @@ export const logout = () => {
   localStorage.removeItem('user');
 };
 
+// Kiểm tra xem có token hay không
+export const isAuthenticated = () => {
+  return !!localStorage.getItem('token');
+};
+
 
 
 
@@ -422,8 +453,15 @@ export const updateAdminProblem = (id, problemData) => apiRequest('put', `/admin
 export const deleteAdminProblem = (id) => apiRequest('delete', `/admin/problems/${id}`, {}, 'Không thể xóa bài tập');
 
 // Admin Testcase APIs
-export const getAdminTestcases = (problemId = null) =>
-  apiRequest('get', '/admin/testcase', { params: problemId ? { problem_id: problemId } : {} }, 'Không thể tải danh sách testcase');
+export const getAdminTestcases = async (problemId = null) => {
+  try {
+    const data = await apiRequest('get', '/admin/testcase', { params: problemId ? { problem_id: problemId } : {} }, 'Không thể tải danh sách testcase');
+    // Backend trả về { data: testcases }, cần extract data.data
+    return data?.data || [];
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const createAdminTestcases = (problemId, testcases) =>
   apiRequest('post', `/admin/testcase/${problemId}`, { data: { testcases } }, 'Không thể tạo testcase');
