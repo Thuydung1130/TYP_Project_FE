@@ -7,6 +7,7 @@ import AdminProblems from './pages/admin/AdminProblems';
 import AdminTestcases from './pages/admin/AdminTestcases';
 import LoginPage from './pages/client/LoginPage';
 import UserAvatar from './components/client/UserAvatar';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -14,9 +15,10 @@ function App() {
     <Router>
 
       <Routes>
-        {/* Login */}
+        {/* Login - Public route */}
         <Route path="/login" element={<LoginPage />} />
-        {/* Admin Routes */}
+        
+        {/* Admin Routes - Public (không cần login) */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
@@ -24,32 +26,36 @@ function App() {
           <Route path="testcases" element={<AdminTestcases />} />
         </Route>
 
-        {/* Client Routes */}
+        {/* Client Routes - Protected */}
         <Route path="/" element={
-          <div className="app">
-            <header className="app-header">
-              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <h1>🧪 C++ Code Grader</h1>
-              </Link>
-              <UserAvatar />
-            </header>
-            <main className="app-content">
-              <ProblemList />
-            </main>
-          </div>
+          <ProtectedRoute>
+            <div className="app">
+              <header className="app-header">
+                <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <h1>🧪 C++ Code Grader</h1>
+                </Link>
+                <UserAvatar />
+              </header>
+              <main className="app-content">
+                <ProblemList />
+              </main>
+            </div>
+          </ProtectedRoute>
         } />
         <Route path="/problems/:id" element={
-          <div className="app">
-            <header className="app-header">
-              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <h1>🧪 C++ Code Grader</h1>
-              </Link>
-              <UserAvatar />
-            </header>
-            <main className="app-content">
-              <ProblemDetail />
-            </main>
-          </div>
+          <ProtectedRoute>
+            <div className="app">
+              <header className="app-header">
+                <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <h1>🧪 C++ Code Grader</h1>
+                </Link>
+                <UserAvatar />
+              </header>
+              <main className="app-content">
+                <ProblemDetail />
+              </main>
+            </div>
+          </ProtectedRoute>
         } />
       </Routes>
     </Router>

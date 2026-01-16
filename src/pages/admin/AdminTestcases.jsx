@@ -49,10 +49,12 @@ function AdminTestcases() {
       setLoading(true);
       setError(null);
       const data = await getAdminTestcases(selectedProblemId);
+      console.log('Testcases data received:', data);
       setTestcases(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error loading testcases:', err);
       setError(err.message || 'Không thể tải danh sách testcase');
+      setTestcases([]);
     } finally {
       setLoading(false);
     }
@@ -375,5 +377,6 @@ function AdminTestcases() {
 }
 
 export default AdminTestcases;
+
 
 
