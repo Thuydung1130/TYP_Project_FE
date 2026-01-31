@@ -119,6 +119,7 @@ function ProblemDetail() {
       
       // Gọi API submit với file hoặc code
       const result = await submitCode(id, code, selectedFile);
+      console.log(result)
       setSubmitResult(result);
     } catch (err) {
       setError(err.message || 'Lỗi khi submit code');
